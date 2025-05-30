@@ -1,39 +1,41 @@
-let img;
+// stick man's position
+let x = 0;
+let y = 250;
 
-function preload() {
-  img = loadImage('senery.jpg'); 
-}
+// stick man's size
+let w = 50;
+let h = 100;
+
+// stick man's speed
+let speed = 3;
 
 function setup() {
-  createCanvas(img.width, img.height);
-  pixelDensity(1);
-  noLoop();
+  createCanvas(600, 400);
+  frameRate(30);
 }
 
 function draw() {
-  background(0);
-  pixelDataManipulation();
-}
+  background(220);
 
-function pixelDataManipulation() {
-  img.loadPixels();
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
-      let index = (x + y * img.width) * 4;
-      let r = img.pixels[index];
-      let g = img.pixels[index + 1];
-      let b = img.pixels[index + 2];
-      
-      // Invert colors
-      r = 255 - r;
-      g = 255 - g;
-      b = 255 - b;
-      
-      img.pixels[index] = r;
-      img.pixels[index + 1] = g;
-      img.pixels[index + 2] = b;
-    }
-  }
-  img.updatePixels();
-  image(img, 0, 0);
+  // draw stick man
+  stroke(0); // Black
+  strokeWeight(5);
+
+  // stick man head
+  fill(255,0,0);
+  ellipse(x + w/2, y, 30, 30);
+
+  // stick man body
+  line(x + w/2,y + 15,x + w/2,y + h - 15);
+
+  // stick man arms
+  line(x + w/2,y + 30,x + w/2 - 20,y + 50);
+  line(x + w/2,y + 30,x + w/2 + 20,y + 50);
+
+  // stick man legs
+  line(x + w/2,y + h - 15,x + w/2 - 20,y + h + 30);
+  line(x + w/2,y + h - 15,x + w/2 + 20,y + h + 30);
+
+  // move the stick man
+  x += speed;
 }
