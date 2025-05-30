@@ -1,37 +1,49 @@
+let heartColor;
 
 function setup() {
-  createCanvas(600, 400);
-  background(220);
+  createCanvas(windowWidth, windowHeight);
+  background(255, 182, 193); // Pink background
+  angleMode(DEGREES);
+  colorMode(RGB, 255);
+  heartColor = color(255, 0, 0); // Initial heart color (red)
 }
 
 function draw() {
-  background(220);
-  
-  // Face
-  fill(0, 255, 0); // Green
-  ellipse(300, 170, 100, 150);
-  
-  // Body
-  fill(0, 255, 0); // Green
-  ellipse(300, 300, 150, 200);
-  
-  // Eyes
-  fill(255); // big
-  ellipse(275, 135, 25, 25);
-  ellipse(325, 135, 25, 25);
-  fill(0); // small
-  ellipse(275, 135, 10, 10);
-  ellipse(325, 135, 10, 10);
-  
-  // lips
-  fill(0); // Black
-  arc(300, 175, 50, 25, 0, PI);
-  
-  // Antina
-  stroke(0); // Black
-  strokeWeight(5);
-  line(300, 130, 300, 100);
-  strokeWeight(2);
-  line(300, 100, 250, 50);
-  line(300, 100, 350, 50);
+  background(255, 182, 193); // Pink background
+  drawHeartPattern();
+}
+
+function drawHeartPattern() {
+  let heartSize = 50;
+  let spacing = 20;
+  for (let y = 0; y < height; y += heartSize + spacing) {
+    for (let x = 0; x < width; x += heartSize + spacing) {
+      drawHeart(x, y, heartSize);
+    }
+  }
+}
+
+function drawHeart(x, y, size) {
+  let heartShape = [];
+  for (let a = 0; a < 360; a++) {
+    let r = size / 2 * (1 + sin(a) * sin(a) * sin(a));
+    let px = x + cos(a) * r;
+    let py = y + sin(a) * r;
+    heartShape.push(createVector(px, py));
+  }
+  fill(heartColor); // Use the current heart color
+  noStroke();
+  beginShape();
+  for (let v of heartShape) {
+    vertex(v.x, v.y);
+  }
+  endShape(CLOSE);
+}
+
+function mousePressed() {
+  // Change the heart color to a random color when the mouse is pressed
+  let r = random(100, 255);
+  let g = random(100, 255);
+  let b = random(100, 255);
+  heartColor = color(r, g, b);
 }
