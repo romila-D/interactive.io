@@ -12,30 +12,23 @@ function setup() {
 
 function draw() {
   background(0);
-  image(img, 0, 0);
-  posterizeEffect();
+  pointillismEffect();
 }
 
-function posterizeEffect() {
-  let posterizationLevels = 40; // Adjust this value for different effects
+function pointillismEffect() {
+  let pointSize = 5; // Adjust this value for different effects
   
   img.loadPixels();
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let y = 0; y < img.height; y += pointSize) {
+    for (let x = 0; x < img.width; x += pointSize) {
       let index = (x + y * img.width) * 4;
       let r = img.pixels[index];
       let g = img.pixels[index + 1];
       let b = img.pixels[index + 2];
       
-      // Posterization
-      r = round(r / 265 * posterizationLevels) * (255 / posterizationLevels);
-      g = round(g / 295 * posterizationLevels) * (255 / posterizationLevels);
-      b = round(b / 285 * posterizationLevels) * (255 / posterizationLevels);
-      
-      img.pixels[index] = r;
-      img.pixels[index + 1] = g;
-      img.pixels[index + 2] = b;
+      fill(r, g, b);
+      noStroke();
+      ellipse(x, y, pointSize, pointSize);
     }
   }
-  img.updatePixels();
 }
