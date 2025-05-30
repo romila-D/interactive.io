@@ -1,45 +1,47 @@
-let caterpillar = [];
-let caterpillarLength = 50;
+let quote = "Believe in yourself.";
+let words = quote.split(" ");
+let fontSizes = [24, 36, 48, 60];
+let fontColors = ["#67630A", "#9C27B0", "#009688"];
+let angles = [0, 0, 0, 0];
+let velocities = [0.5, 1, 1.5, 2];
+let yPositions = [200, 300, 400, 500];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(144, 238, 144); }
-
+  createCanvas(1000, 1000);
+  background(255);
+  textSize(24);
+  textAlign(CENTER, CENTER);
+}
 
 function draw() {
-  background(144, 238, 144, 10); 
+  background(173, 216 , 230);
   
   fill(0);
-  textSize(28);
-text("Move the Caterpillar" , width / 2 , 50);
+  textSize(32);
+  text("Click On The Words", width / 2, 50);
   
   
-  caterpillar.push({x: mouseX, y: mouseY});
-  
-
-  if (caterpillar.length > caterpillarLength) {
-    caterpillar.shift();
-  }
-  
-  
-  for (let i = 0; i < caterpillar.length; i++) {
-    let circle = caterpillar[i];
-    if (i == caterpillar.length - 1) {
+  for (let i = 0; i < words.length; i++) {
+    fill(fontColors[i % fontColors.length]);
+    textSize(fontSizes[i % fontSizes.length]);
+    push();
+    translate(width / 2, yPositions[i]);
+    rotate(radians(angles[i]));
+    text(words[i], 0, 0);
+    pop();
     
-      fill(255, 255, 0); 
-      noStroke();
-      ellipse(circle.x, circle.y, 20, 20);
-      
-      
-      fill(0); 
-      ellipse(circle.x - 5, circle.y - 5, 5, 5);
-      ellipse(circle.x + 5, circle.y - 5, 5, 5);
-      arc(circle.x, circle.y + 5, 10, 5, 0, PI);
-    } else {
-      
-      fill(255, 255, 0); 
-      noStroke();
-      ellipse(circle.x, circle.y, 15, 15);
+    angles[i] += velocities[i];
+    
+    if (angles[i] > 360) {
+      angles[i] -= 360;
+    }
+  }
+}
+
+function mousePressed() {
+  for (let i = 0; i < words.length; i++) {
+    if (dist(mouseX, mouseY, width / 2, yPositions[i]) < 50) {
+      velocities[i] *= -1;
     }
   }
 }
