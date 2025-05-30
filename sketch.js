@@ -1,44 +1,45 @@
-let song;
-let amp;
-let fft;
-
-function preload() {
-  song = loadSound('letmeloveu.mp3');
-}
+let caterpillar = [];
+let caterpillarLength = 50;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  angleMode(DEGREES);
-  amp = new p5.Amplitude();
-  fft = new p5.FFT();
-  song.play();
-}
+  background(144, 238, 144); }
+
 
 function draw() {
-  background(0);
-  let soundLevel = amp.getLevel();
-  let spectrum = fft.analyze();
+  background(144, 238, 144, 10); 
   
-  // Draw circles
-  noStroke();
-  fill(255, 0, 0); // Red color
-  ellipse(width / 2, height / 2, 200 + soundLevel * 100);
+  fill(0);
+  textSize(28);
+text("Move the Caterpillar" , width / 2 , 50);
   
-  fill(255, 150, 150); // Light red color
-  ellipse(width / 2, height / 2, 100 + soundLevel * 50);
   
-  fill(0); // Black color
-  ellipse(width / 2, height / 2, 20 + soundLevel * 10);
+  caterpillar.push({x: mouseX, y: mouseY});
   
-  // Draw white waves
-  stroke(255);
-  noFill();
-  beginShape();
-  for (let i = 0; i < spectrum.length; i++) {
-    let frequencyValue = spectrum[i];
-    let x = map(i, 0, spectrum.length, 0, width);
-    let y = height / 2 + map(frequencyValue , 0, 255, -height / 2, height / 2);
-    vertex(x, y);
+
+  if (caterpillar.length > caterpillarLength) {
+    caterpillar.shift();
   }
-  endShape();
+  
+  
+  for (let i = 0; i < caterpillar.length; i++) {
+    let circle = caterpillar[i];
+    if (i == caterpillar.length - 1) {
+    
+      fill(255, 255, 0); 
+      noStroke();
+      ellipse(circle.x, circle.y, 20, 20);
+      
+      
+      fill(0); 
+      ellipse(circle.x - 5, circle.y - 5, 5, 5);
+      ellipse(circle.x + 5, circle.y - 5, 5, 5);
+      arc(circle.x, circle.y + 5, 10, 5, 0, PI);
+    } else {
+      
+      fill(255, 255, 0); 
+      noStroke();
+      ellipse(circle.x, circle.y, 15, 15);
+    }
+  }
 }
