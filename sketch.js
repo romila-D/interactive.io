@@ -1,49 +1,41 @@
-let heartColor;
+let img;
+
+function preload() {
+  img = loadImage('senery.jpg'); 
+}
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(255, 182, 193); // Pink background
-  angleMode(DEGREES);
-  colorMode(RGB, 255);
-  heartColor = color(255, 0, 0); // Initial heart color (red)
+  createCanvas(img.width, img.height);
+  pixelDensity(1);
+  noLoop();
 }
 
 function draw() {
-  background(255, 182, 193); // Pink background
-  drawHeartPattern();
+  background(0);
+  image(img, 0, 0);
+  posterizeEffect();
 }
 
-function drawHeartPattern() {
-  let heartSize = 50;
-  let spacing = 20;
-  for (let y = 0; y < height; y += heartSize + spacing) {
-    for (let x = 0; x < width; x += heartSize + spacing) {
-      drawHeart(x, y, heartSize);
+function posterizeEffect() {
+  let posterizationLevels = 40; // Adjust this value for different effects
+  
+  img.loadPixels();
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let index = (x + y * img.width) * 4;
+      let r = img.pixels[index];
+      let g = img.pixels[index + 1];
+      let b = img.pixels[index + 2];
+      
+      // Posterization
+      r = round(r / 265 * posterizationLevels) * (255 / posterizationLevels);
+      g = round(g / 295 * posterizationLevels) * (255 / posterizationLevels);
+      b = round(b / 285 * posterizationLevels) * (255 / posterizationLevels);
+      
+      img.pixels[index] = r;
+      img.pixels[index + 1] = g;
+      img.pixels[index + 2] = b;
     }
   }
-}
-
-function drawHeart(x, y, size) {
-  let heartShape = [];
-  for (let a = 0; a < 360; a++) {
-    let r = size / 2 * (1 + sin(a) * sin(a) * sin(a));
-    let px = x + cos(a) * r;
-    let py = y + sin(a) * r;
-    heartShape.push(createVector(px, py));
-  }
-  fill(heartColor); // Use the current heart color
-  noStroke();
-  beginShape();
-  for (let v of heartShape) {
-    vertex(v.x, v.y);
-  }
-  endShape(CLOSE);
-}
-
-function mousePressed() {
-  // Change the heart color to a random color when the mouse is pressed
-  let r = random(100, 255);
-  let g = random(100, 255);
-  let b = random(100, 255);
-  heartColor = color(r, g, b);
+  img.updatePixels();
 }
